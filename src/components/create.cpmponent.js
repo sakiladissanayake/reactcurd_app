@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class Create extends Component {
     constructor(props) {
@@ -17,25 +18,34 @@ export default class Create extends Component {
 
     onChangePersonName(e) {
         this.setState({
-            person_name: e.traget.value
+            person_name: e.target.value
         });
     }
 
     onChangeBusinessName(e) {
         this.setState({
-            business_name: e.traget.value
+            business_name: e.target.value
         });
     }
 
     onChangeGstNumber(e) {
         this.setState({
-            business_gst_number: e.traget.value
+            business_gst_number: e.target.value
         });
     }
 
     onSubmit(e){
         e.preventDefault();
-        console.log(`The values are ${this.state.person_name}, ${this.state.business_name}, and ${this.state.business_gst_number}`)
+        console.log(`The values are ${this.state.person_name}, ${this.state.business_name}, and ${this.state.business_gst_number}`);
+        const obj = {
+            person_name: this.state.person_name,
+            business_name: this.state.business_name,
+            business_gst_number: this.state.business_gst_number
+        };
+
+        axios.post('http://localhost:4000/business/add', obj)
+        .then(res => console.log(res.data));
+
         this.setState({
             person_name:'',
             business_name: '',
@@ -45,7 +55,7 @@ export default class Create extends Component {
     
     render() {
         return (
-           <div style={{marginTop: 10}}>
+           <div style={{ marginTop: 10 }}>
            <h3>Add New Business</h3>
             <form onSubmit={this.onSubmit}> 
                 <div className="form-group">
@@ -54,7 +64,7 @@ export default class Create extends Component {
                     type="text" 
                     className="form-control"
                     value={this.state.person_name}
-                    onChange={this.onChangePersonName} 
+                    onChange={this.onChangePersonName.bind(this)} 
                     />                    
                 </div>
                 <div className="form-group">
@@ -63,7 +73,7 @@ export default class Create extends Component {
                     type="text" 
                     className="form-control"
                     value={this.state.business_name}
-                    onChange={this.onChangeBusinessName}
+                    onChange={this.onChangeBusinessName.bind(this)}
                      />                    
                 </div>
                 <div className="form-group">
@@ -72,7 +82,7 @@ export default class Create extends Component {
                     type="text" 
                     className="form-control"
                     value={this.state.business_gst_number}
-                    onChange={this.onChangeGstNumber}
+                    onChange={this.onChangeGstNumber.bind(this)}
                      />                    
                 </div>
                 <div className="form-group">
